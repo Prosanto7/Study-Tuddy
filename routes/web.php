@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,14 +16,23 @@ use App\Http\Controllers\ProjectController;
 |
 */
 
-Route::get('/', function () {
+Route::get('/welcome', function () {
     return view('welcome');
 });
 
-Route::get('/hello', function () {
-    return "Hello World";
-});
+// Route::get('/hello', function () {
+//     return "Hello World";
+// });
 
+Route::get('/login', [AuthController::class, 'login_view']);
+
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/register', [AuthController::class, 'register_view']);
+
+Route::post('/register', [AuthController::class, 'register']);
+
+Route::get('/', [ProjectController::class, 'showHome']);
 
 Route::get('/home', [ProjectController::class, 'showHome']);
 
