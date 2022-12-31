@@ -12,10 +12,15 @@
 
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                                 <ul class="navbar-nav" style="margin-left: auto;">
-                                    <li class="nav-item"><a class="nav-link" href="{{url('home')}}" style="color: #ffffff;">Home</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="{{url('subjects')}}" style="color: #ffffff;">Subjects</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="{{url('subjectperday')}}" style="color: #ffffff;">Subject Per Day</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="{{url('timeslots')}}" style="color: #ffffff;">Time Slots</a></li>
+                                    @if (session()->has('email'))
+                                        <li class="nav-item"><a class="nav-link" href="{{url('home')}}" style="color: #ffffff;">Home</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="{{url('subjects')}}" style="color: #ffffff;">Subjects</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="{{url('subjectperday')}}" style="color: #ffffff;">Subject Per Day</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="{{url('timeslots')}}" style="color: #ffffff;">Time Slots</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="{{url('logout')}}" style="color: #ffffff;">Logout</a></li>
+                                    @else 
+                                        <li class="nav-item"><a class="nav-link" style="color: #ffffff;">Plan Your Study</a></li>
+                                    @endif
                                 </ul>
                         </div>
 

@@ -24,23 +24,32 @@ Route::get('/welcome', function () {
 //     return "Hello World";
 // });
 
-Route::get('/login', [AuthController::class, 'login_view']);
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('/', [AuthController::class, 'login_view'])->name('login');
 
-Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/login', [AuthController::class, 'login_view'])->name('login');
 
-Route::get('/register', [AuthController::class, 'register_view']);
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-Route::post('/register', [AuthController::class, 'register']);
+    Route::get('/register', [AuthController::class, 'register_view']);
 
-Route::get('/', [ProjectController::class, 'showHome']);
+    Route::post('/register', [AuthController::class, 'register']);
+});
 
-Route::get('/home', [ProjectController::class, 'showHome']);
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/logout', [AuthController::class, 'logout']);
 
-Route::get('/subjects', [ProjectController::class, 'showSubjects']);
+    Route::get('/', [ProjectController::class, 'showHome']);
 
-Route::get('/subjectperday', [ProjectController::class, 'showSubjectPerDay']);
+    Route::get('/home', [ProjectController::class, 'showHome']);
 
-Route::get('/timeslots', [ProjectController::class, 'showTimeSlots']);
+    Route::get('/subjects', [ProjectController::class, 'showSubjects']);
+
+    Route::get('/subjectperday', [ProjectController::class, 'showSubjectPerDay']);
+
+    Route::get('/timeslots', [ProjectController::class, 'showTimeSlots']);
+});
+
 
 
 // Route::get('/home', [SiteController::class, 'Home']);

@@ -1,11 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
-    @if(Session::has('error'))
-        <p class="text-danger">{{Session::get('error')}}</p>
-    @endif
-
     <div class="container main mt-5 mb-5" style="height:800px;">  	
             <div class="login">
                 <label style="transform: scale(.6);" onclick="window.location='{{url('login')}}'">Login</label>
@@ -36,7 +31,7 @@
                         <span class="warning">{{$message}}</span>
                     @enderror
 
-					<button>Sign up</button>
+					<button style="width: 70%;height: 40px;margin: 10px auto;justify-content: center;display: block;color: #fff;background: #573b8a;font-size: 1em;font-weight: bold;margin-top: 20px;outline: none;border: none;border-radius: 5px;transition: .2s ease-in;cursor: pointer;">Sign Up</button>
 				</form>
 			</div>
 	</div>
