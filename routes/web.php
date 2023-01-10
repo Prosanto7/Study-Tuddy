@@ -50,6 +50,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/updatesubjectsperday', [ProjectController::class, 'updateSubjectsPerDay']);
 
     Route::get('/timeslots', [ProjectController::class, 'showTimeSlots']);
+
+    Route::post('/deletetimeslot', [ProjectController::class, 'deleteTimeSlot']);
+
+    Route::post('/addtimeslot', [ProjectController::class, 'addTimeSlot']);
 });
 
 

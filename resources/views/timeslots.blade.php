@@ -10,149 +10,65 @@
                     </tr>
                     <tr>
                         <th>No</th>
-                        <th>Start</th>
-                        <th>am/pm</th>
-                        <th>End</th>
-                        <th>am/pm</th>
+                        <th>Start</th>                        
+                        <th>End</th>                   
                         <th>Duration</th>
-                        <th colspan="2">Action</th>
+                        <th>Action</th>
                     </tr>
-
-                   
                     <tbody>
-                        <tr>
-                            <td>
-                                1
-                            </td>
-                            <td>
-                                9
-                            </td>
-                            <td>
-                                am
-                            </td>
-                            <td>
-                                10
-                            </td>
-                            <td>
-                                am
-                            </td>
-                            <td>
-                                60 minutes
-                            </td>
-                            <td>
-                                <button class='btn btn-warning fw-bold' type='submit' name='' value=''>Edit</button>
-                            </td>
-                            <td>
-                                <button class='btn btn-danger fw-bold' type='submit' name='' value=''>Remove</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                2
-                            </td>
-                            <td>
-                                10
-                            </td>
-                            <td>
-                                am
-                            </td>
-                            <td>
-                                10.30
-                            </td>
-                            <td>
-                                am
-                            </td>
-                            <td>
-                                30 minutes
-                            </td>
-                            <td>
-                                <button class='btn btn-warning fw-bold' type='submit' name='' value=''>Edit</button>
-                            </td>
-                            <td>
-                                <button class='btn btn-danger fw-bold' type='submit' name='' value=''>Remove</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                3
-                            </td>
-                            <td>
-                                6
-                            </td>
-                            <td>
-                                pm
-                            </td>
-                            <td>
-                                8
-                            </td>
-                            <td>
-                                pm
-                            </td>
-                            <td>
-                                120 minutes
-                            </td>
-                            <td>
-                                <button class='btn btn-warning fw-bold' type='submit' name='' value=''>Edit</button>
-                            </td>
-                            <td>
-                                <button class='btn btn-danger fw-bold' type='submit' name='' value=''>Remove</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                4
-                            </td>
-                            <td>
-                                8
-                            </td>
-                            <td>
-                                pm
-                            </td>
-                            <td>
-                                9
-                            </td>
-                            <td>
-                                pm
-                            </td>
-                            <td>
-                                60 minutes
-                            </td>
-                            <td>
-                                <button class='btn btn-warning fw-bold' type='submit' name='' value=''>Edit</button>
-                            </td>
-                            <td>
-                                <button class='btn btn-danger fw-bold' type='submit' name='' value=''>Remove</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                5
-                            </td>
-                            <td>
-                                <input type="text" class="form-control">
-                            </td>
-                            <td>
-                                <select name="" id="" class="form-control">
-                                    <option value="">am</option>
-                                    <option value="">pm</option>
-                                </select>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control">
-                            </td>
-                            <td>
-                                <select name="" id="" class="form-control">
-                                    <option value="">am</option>
-                                    <option value="">pm</option>
-                                </select>
-                            </td>
-                            <td>
-                                
-                            </td>
-                            <td colspan="2">
-                                <button class='btn btn-success fw-bold' type='submit' name='' value=''>Add Time Slot</button>
-                            </td>
-                        </tr>
+                        @php 
+                            $i = 1;
+                            $lastID = 0;
+                        @endphp
+
+                        @foreach($timeSlots as $timeSlot) 
+                            <tr>
+                                <td>
+                                    {{$i++}} 
+                                </td>
+                                <td>
+                                    {{date('h:i:s A', strtotime($timeSlot->start))}}
+                                </td>
+                                <td>
+                                    {{date('h:i:s A', strtotime($timeSlot->end))}}
+                                </td>
+                                <td>
+                                    @php
+                                        $duration = (strtotime($timeSlot->end) - strtotime($timeSlot->start)) / 60;
+                                        if ($duration >= 60) {
+                                            echo (int)($duration / 60)." hour " . ($duration % 60) . " minutes";
+                                        } else {
+                                            echo $duration." minutes";
+                                        }
+                                        $lastID = $timeSlot->id;
+                                    @endphp
+                                </td>
+                                <td>
+                                    <form action="{{url('deletetimeslot')}}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger fw-bold" name="rowId" value="{{$timeSlot->id}}">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                            <tr>
+                                <form action="addtimeslot" method="POST">
+                                @csrf
+                                    <td>
+                                        {{$i++}}
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="time" name="start" style="height:100%;">
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="time" name="end" style="height:100%;">
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        <button type="submit" class="btn btn-success fw-bold" name="addTime" value="{{$lastID}}">Add Time Slot</button>
+                                    </td>
+                                </form>
+                            </tr>
                     </tbody>
                 </table>
             </div>
