@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\SubjectsPerDay;
 
 class AuthController extends Controller
 {
@@ -59,13 +60,26 @@ class AuthController extends Controller
         ];
 
         $this->validate($request, $rules, $customMessage);
+
+        $id = rand(1111111111, 9999999999);
+
+        $user = new User();
+        $user->id = $id;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = \Hash::make($request->rpassword);
+        $user->save();
         
-        User::create([
-            'id' => rand(1111111111, 9999999999),
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => \Hash::make($request->rpassword),
-        ]);
+        // User::create([
+        //     'id' => rand(1111111111, 9999999999),
+        //     'name' => $request->name,
+        //     'email' => $request->email,
+        //     'password' => \Hash::make($request->rpassword),
+        // ]);
+
+        $subjectPerDay = new SubjectsPerDay();
+        $subjectPerDay->id = $id;
+        $subjectPerDay->save();
 
         return redirect('login')->with('success', 'Registration Completed Successfully! Please Login now');
     }

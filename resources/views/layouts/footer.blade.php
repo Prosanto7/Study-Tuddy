@@ -32,7 +32,7 @@
                             <ul class="footer-ul" style=" margin: 0;list-style-type: none;text-align: center;">
                                 <li>
                                     <p>Design, Development and Maintenance by
-                                        <a href="https://github.com/orgs/Prosanto7" target="_blank" class="footer-link" style="color: #ffffff;">Prosanto Deb</a>
+                                        <a href="https://github.com/Prosanto7" target="_blank" class="footer-link" style="color: #ffffff;">Prosanto Deb</a>
                                     </p>
                                 </li>
                             </ul>

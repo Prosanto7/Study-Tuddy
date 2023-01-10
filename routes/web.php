@@ -45,7 +45,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/subjects', [ProjectController::class, 'showSubjects']);
 
-    Route::get('/subjectperday', [ProjectController::class, 'showSubjectPerDay']);
+    Route::get('/subjectsperday', [ProjectController::class, 'showSubjectsPerDay']);
+
+    Route::post('/updatesubjectsperday', [ProjectController::class, 'updateSubjectsPerDay']);
 
     Route::get('/timeslots', [ProjectController::class, 'showTimeSlots']);
 });
