@@ -1,233 +1,81 @@
 @extends('layouts.app')
 
 @section('content')
+
             <div class="container mt-5 mb-5">
                 <table class="table table-bordered table-hover text-center">
-                    <tr>
-                        <th colspan="5">
-                            <h2 class="text-center fw-bold">Subjects</h2>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>No</th>
-                        <th>Subject</th>
-                        <th>Topics</th>
-                        <th>Status</th>
-                        <th>Total Percantage</th>
-                    </tr>
+                    @php 
+                        $i = 1;
+                    @endphp
+                        <tr>
+                            <th>No</th>
+                            <th>Subject or Course Title</th>
+                            <th>Action</th>
+                        </tr>
+                    @foreach ($subjects as $subject) 
+                        <tr>
+                            <td>
+                                {{$i++}}
+                            </td>
+                       
+                            <td>
+                                {{$subject->subject}}
+                            </td>
+                            <td>
+                                <form action="{{url('deletesubject')}}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger fw-bold" name="rowId" value="{{$subject->id}}">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                        <tr>
+                            <form action="{{url('addsubject')}}" method="POST">
+                            @csrf
+                                <td>
+                                    {{$i++}}
+                                </td>
+                                <td>
+                                    <input class="form-control" type="text" name="subjectName" style="height:100%; margin-top: 0%; margin-bottom: 0%;">
+                                </td>
+                                <td>
+                                    <button type="submit" class="btn btn-success fw-bold" name="addSubject">Add Subject</button>
+                                </td>
+                            </form>
+                        </tr>
+                </table>
+            </div>
+            
+            <div class="container mt-5 mb-5">
+                <table class="table table-bordered table-hover text-center">
+                        @php 
+                            $i = 1;
+                        @endphp
+                            <tr>
+                                <th>No</th>
+                                <th>Subject or Course Title</th>
+                                <th>Topics</th>
+                                <th>Status</th>
+                                <th>Total Percantage</th>
+                            </tr>
                     <tbody>
-                        <tr>
-                            <td>
-                                1
-                            </td>
-                            <td>
-                                Discrete Mathmatics
-                            </td>
-                            <td>
-                                Introduction
-                            </td>
-                            <td>
-                                Completed
-                            </td>
-                            <td>
-                                33%
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                Tree
-                            </td>
-                            <td>
-                                Not Completed
-                            </td>
-                            <td>
-                                
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                Graph
-                            </td>
-                            <td>
-                                Not Completed
-                            </td>
-                            <td>
-                                
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                2
-                            </td>
-                            <td>
-                                Java
-                            </td>
-                            <td>
-                                Introduction
-                            </td>
-                            <td>
-                                Completed
-                            </td>
-                            <td>
-                                25%
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                Polymorphism
-                            </td>
-                            <td>
-                                Not Completed
-                            </td>
-                            <td>
-                                
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                Abstraction
-                            </td>
-                            <td>
-                                Not Completed
-                            </td>
-                            <td>
-                                
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                Inheritence
-                            </td>
-                            <td>
-                                Not Completed
-                            </td>
-                            <td>
-                                
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                3
-                            </td>
-                            <td>
-                                Algorithm
-                            </td>
-                            <td>
-                                Introduction
-                            </td>
-                            <td>
-                                Completed
-                            </td>
-                            <td>
-                                40%
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                Complexity
-                            </td>
-                            <td>
-                                Completed
-                            </td>
-                            <td>
-                                
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                Merge Sort
-                            </td>
-                            <td>
-                                Not Completed
-                            </td>
-                            <td>
-                                
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                Quick Sort
-                            </td>
-                            <td>
-                                Not Completed
-                            </td>
-                            <td>
-                                
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                Tree
-                            </td>
-                            <td>
-                                Not Completed
-                            </td>
-                            <td>
-                                
-                            </td>
-                        </tr>
+                        @foreach ($subjectStatus as $subjectstat)
+                            @foreach($subjects as $subject) 
+                            
+                            @endforeach
+                            <tr>
+                                <td>
+                                    {{$i++}}
+                                </td>
+                        
+                                <td>
+                                    {{$subjectstat->subject}}
+                                </td>
+                                <td>
+                                    
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

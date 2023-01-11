@@ -12,10 +12,6 @@ class ProjectController extends Controller
         return view('home');
     }
 
-    function showSubjects() {
-        return view('subjects');
-    }
-
     function showSubjectsPerDay() {
         $subjectsPerDay = SubjectsPerDay::find(\Auth::id());
         return view('subjectperday', ['subjectsPerDay' => $subjectsPerDay]);
@@ -81,5 +77,41 @@ class ProjectController extends Controller
         ]);
 
         return back()->with('success','Time Slot added Successfully.');
+    }
+
+    function showSubjects() {
+        $subjects = DB::table('subjects')->where('user_id', \Auth::id())->get();
+        $subjectStatus = DB::table('subject_status')->where('user_id', \Auth::id())-get();
+        return view('subjects', ['subjects' => $subjects, 'subjectStatus' => $subjectStatus]);
+    }
+
+    function deleteSubject() {
+        DB::table('subjects')->where('id', $_POST['rowId'])->delete();
+        return back()->with('success','Subject deleted Successfully.');
+    }
+
+    function addSubject() {
+        $subjects = DB::table('subjects')->where('user_id', \Auth::id())->get();
+        $lastID = 0;
+        foreach($subjects as $subject) {
+            if ($subject->subject == $_POST['subjectName']) {
+                return back()->with('error','Subject ' . $_POST['subjectName'] . ' is added already!');
+            }
+            $lastID = $subject->id;
+        }
+
+        if ($lastID == 0) {
+            $lastID = \Auth::id() + 1;
+        } else {
+            $lastID = $lastID + 1;
+        }
+
+        DB::table('subjects')->insert([
+            'id' => $lastID,
+            'user_id' => \Auth::id(),
+            'subject' => $_POST['subjectName']
+        ]);
+
+        return back()->with('success','Subject ' . $_POST['subjectName'] . ' added Successfully!');
     }
 }
