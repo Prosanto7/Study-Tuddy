@@ -49,6 +49,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/deletesubject', [ProjectController::class, 'deleteSubject']);
 
+    Route::post('/addtopic/{subject}', [ProjectController::class, 'addTopic']);
+
+    Route::post('/deletetopic', [ProjectController::class, 'deleteTopic']);
+
     Route::get('/subjectsperday', [ProjectController::class, 'showSubjectsPerDay']);
 
     Route::post('/updatesubjectsperday', [ProjectController::class, 'updateSubjectsPerDay']);

@@ -81,7 +81,7 @@ class ProjectController extends Controller
 
     function showSubjects() {
         $subjects = DB::table('subjects')->where('user_id', \Auth::id())->get();
-        $subjectStatus = DB::table('subject_status')->where('user_id', \Auth::id())-get();
+        $subjectStatus = DB::table('subject_status')->where('user_id', \Auth::id())->get();
         return view('subjects', ['subjects' => $subjects, 'subjectStatus' => $subjectStatus]);
     }
 
@@ -113,5 +113,30 @@ class ProjectController extends Controller
         ]);
 
         return back()->with('success','Subject ' . $_POST['subjectName'] . ' added Successfully!');
+    }
+
+    function deleteTopic() {
+        DB::table('subject_status')->where('id', $_POST['rowId'])->delete();
+        return back()->with('success','Topic deleted Successfully!');
+    }
+
+    function addTopic($subject) {
+        $subjectStatus = DB::table('subject_status')->where('user_id', \Auth::id())->where('subject', $subject)->get();
+        
+        foreach($subjectStatus as $subjectStat) {
+            if ($subjectStat->topic == $_POST['topicName']) {
+                return back()->with('error','Topic ' . $_POST['topicName'] . ' is added already!');
+            }
+        }
+
+        DB::table('subject_status')->insert([
+            'id' => rand(1111111111111, 9999999999999),
+            'user_id' => \Auth::id(),
+            'subject' => $subject,
+            'topic' => $_POST['topicName'],
+            'status' => $_POST['status']
+        ]);
+
+        return back()->with('success','Topic ' . $_POST['topicName'] . ' added Successfully!');
     }
 }

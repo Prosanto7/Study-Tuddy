@@ -36,7 +36,7 @@
                                     {{$i++}}
                                 </td>
                                 <td>
-                                    <input class="form-control" type="text" name="subjectName" style="height:100%; margin-top: 0%; margin-bottom: 0%;">
+                                    <input class="form-control" type="text" name="subjectName" style="height:100%; margin-top: 0%; margin-bottom: 0%;" placeholder="Enter subject name or course title">
                                 </td>
                                 <td>
                                     <button type="submit" class="btn btn-success fw-bold" name="addSubject">Add Subject</button>
@@ -56,25 +56,57 @@
                                 <th>Subject or Course Title</th>
                                 <th>Topics</th>
                                 <th>Status</th>
-                                <th>Total Percantage</th>
+                                <th>Action</th>
                             </tr>
                     <tbody>
-                        @foreach ($subjectStatus as $subjectstat)
-                            @foreach($subjects as $subject) 
-                            
-                            @endforeach
+                        @foreach ($subjects as $subject)
+                            @php
+                                $subjectName = $subject->subject
+                            @endphp
                             <tr>
                                 <td>
                                     {{$i++}}
                                 </td>
-                        
                                 <td>
-                                    {{$subjectstat->subject}}
+                                    {{$subject->subject}}
                                 </td>
-                                <td>
-                                    
-                                </td>
-                            </tr>
+                                @foreach($subjectStatus as $subjectstat) 
+                                    @if ($subjectstat->subject == $subject->subject) 
+                                        <td> 
+                                            {{$subjectstat->topic}}
+                                        </td>
+                                        <td> 
+                                            {{$subjectstat->status}}
+                                        </td>
+                                        <td> 
+                                            <form action="{{url('deletetopic')}}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger fw-bold" name="rowId" value="{{$subjectstat->id}}">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr> 
+                                    <tr>
+                                        <td colspan="2">
+
+                                        </td>
+                                    @endif    
+                                @endforeach
+                                <form action="{{url('addtopic/'.$subjectName)}}" method="POST">
+                                    @csrf
+                                    <td>
+                                        <input class="form-control" type="text" name="topicName" style="height:100%; margin-top: 0%; margin-bottom: 0%;" placeholder="Enter topic name">
+                                    </td>
+                                    <td>
+                                        <select class="form-select text-center" aria-label="Default select example" name="status">
+                                            <option>Completed</option>
+                                            <option selected>Not Completed</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button type="submit" class="btn btn-success fw-bold" name="addTopic">Add Topic</button>
+                                    </td>
+                                    </tr>
+                                </form>    
                         @endforeach
                     </tbody>
                 </table>
