@@ -143,7 +143,7 @@ class ProjectController extends Controller
             'status' => $_POST['status']
         ]);
 
-        return back()->with('success','Topic ' . $_POST['topicName'] . ' added Successfully!');
+        return redirect()->to('subjects/#'.$subject);
     }
 
     function updateTopic($subject) {
@@ -156,6 +156,6 @@ class ProjectController extends Controller
         }
 
         DB::table('subject_status')->where('id', $_POST['rowId'])->update(['topic' => $_POST['topicName'], 'status' => $_POST['status']]);
-        return back()->with('success','Topic updated Successfully');
+        return redirect()->to('subjects/#'.$subject);
     }
 }

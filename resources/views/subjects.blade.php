@@ -70,7 +70,7 @@
                                 <td>
                                     {{$i++}}
                                 </td>
-                                <td>
+                                <td id="{{$subjectName}}">
                                     {{$subject->subject}}
                                 </td>
                                 @foreach($subjectStatus as $subjectstat) 
