@@ -33,7 +33,23 @@ Route::group(['middleware' => 'guest'], function () {
 
     Route::get('/register', [AuthController::class, 'register_view']);
 
-    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/sendcode', [AuthController::class, 'sendCode']);
+
+    Route::post('/checkcode', [AuthController::class, 'checkCode']);
+
+    Route::get('/forgetpassword', function () {
+        return view('auth.forgetpassword');
+    });
+
+    Route::get('/entercode/{email}', function ($email) {
+        return view('auth.entercode', ['email'=> $email]);
+    });
+
+    Route::get('/updatepassword/{email}', function ($email) {
+        return view('auth.updatepassword', ['email'=> $email]);
+    });
+
+    Route::post('/update', [AuthController::class, 'update']);
 });
 
 Route::group(['middleware' => 'auth'], function () {

@@ -20,6 +20,7 @@
 
 					<button style="width: 70%;height: 40px;margin: 10px auto;justify-content: center;display: block;color: #fff;background: #573b8a;font-size: 1em;font-weight: bold;margin-top: 20px;outline: none;border: none;border-radius: 5px;transition: .2s ease-in;cursor: pointer;">Login</button>
 				</form>
+                <a href="{{url('forgetpassword')}}" style="width: 70%;height: 40px;margin: 10px auto;justify-content: center;display: block;color: #fff;font-size: 1em;font-weight: bold;margin-top: 20px;outline: none;border: none;border-radius: 5px;transition: .2s ease-in;cursor: pointer;">Forgot Password?</a>
 			</div>
 
             <div class="loginSignUp">

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use App\Models\SubjectsPerDay;
+use App\Mail\MailNotify;
+use Mail;
 
 class AuthController extends Controller
 {
@@ -82,5 +85,70 @@ class AuthController extends Controller
         $subjectPerDay->save();
 
         return redirect('login')->with('success', 'Registration Completed Successfully! Please Login now');
+    }
+
+    public function sendCode(Request $request) {
+        $rules = [
+            'email' => 'required|email',
+        ];
+
+        $this->validate($request, $rules);
+
+        $code = rand(111111, 999999);
+
+        $users = DB::table('users')->where('email', $request->email)->get();
+
+        if (count($users) == 0) {
+            return back()->with('error','This email is not registered in our system.');
+        }
+
+        $user = User::find($users[0]->id);
+        $user->remember_token = $code;
+        $user->save();
+
+        $data = [
+            "subject"=>"Reset Password",
+            "body"=>"Hello friend Here is your verification code! Please use to reset password " . $code
+            ];
+          // MailNotify class that is extend from Mailable class.
+          try
+          {
+            Mail::to($request->email)->send(new MailNotify($data));
+            return redirect('entercode/'.$request->email)->with('success','Code is successfully sent to your email address.');
+          }
+          catch(Exception $e)
+          {
+            return back()->with('error','Some Error Occurred. Please Try Again!');
+          }
+    }
+
+    function checkCode(Request $request) {
+        $users = DB::table('users')->where('email', $request->rowId)->get();
+
+        if ($request->code == $users[0]->remember_token) {
+            return redirect('updatepassword/'.$request->rowId)->with('success', 'You can update password now.');
+        }
+
+        return back()->with('error','Incorrect Code. Please Try Again!');
+    }
+
+    function update(Request $request) {
+        $rules = [
+            'rpassword' => 'required|min:8',
+            'repassword' => 'required|min:8|same:rpassword',
+        ];
+
+        $customMessage = [
+            'rpassword.required' => 'The password field is required.',
+            'rpassword.min' => 'The password must be at least 8 characters.',
+            'repassword.same' => 'The password confirmation does not match.',
+            'repassword.required' => 'The password field is required.',
+            'repassword.min' => 'The password must be at least 8 characters.',
+        ];
+
+        $this->validate($request, $rules, $customMessage);
+
+        DB::table('users')->where('email', $_POST['rowId'])->update(['password' => \Hash::make($request->rpassword)]);
+        return redirect('login')->with('success', 'Password is updated.');
     }
 }
