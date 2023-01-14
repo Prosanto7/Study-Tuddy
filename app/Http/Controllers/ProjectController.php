@@ -127,8 +127,6 @@ class ProjectController extends Controller
     }
 
     function addTopic($subject) {
-
-
         $subjectStatus = DB::table('subject_status')->where('user_id', \Auth::id())->where('subject', $subject)->get();
         
         foreach($subjectStatus as $subjectStat) {
@@ -146,5 +144,18 @@ class ProjectController extends Controller
         ]);
 
         return back()->with('success','Topic ' . $_POST['topicName'] . ' added Successfully!');
+    }
+
+    function updateTopic($subject) {
+        $subjectStatus = DB::table('subject_status')->where('user_id', \Auth::id())->where('subject', $subject)->get();
+        
+        foreach($subjectStatus as $subjectStat) {
+            if (($subjectStat->topic == $_POST['topicName']) && ($subjectStat->id != $_POST['rowId'])) {
+                return back()->with('error','Topic ' . $_POST['topicName'] . ' is added already!');
+            }
+        }
+
+        DB::table('subject_status')->where('id', $_POST['rowId'])->update(['topic' => $_POST['topicName'], 'status' => $_POST['status']]);
+        return back()->with('success','Topic updated Successfully');
     }
 }

@@ -44,7 +44,7 @@
                                 <td>
                                     <form action="{{url('deletetimeslot')}}" method="POST">
                                         @csrf
-                                        <button type="submit" class="btn btn-danger fw-bold" name="rowId" value="{{$timeSlot->id}}">Delete</button>
+                                        <button type="submit" class="btn btn-danger fw-bold" name="rowId" value="{{$timeSlot->id}}"><i class="fa fa-trash"></i></button>
                                     </form>
                                 </td>
                             </tr>
