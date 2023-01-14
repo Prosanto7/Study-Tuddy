@@ -43,6 +43,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/home', [ProjectController::class, 'showHome']);
 
+    Route::post('/setcompleted', [ProjectController::class, 'setCompleted']);
+
     Route::get('/subjects', [ProjectController::class, 'showSubjects']);
 
     Route::post('/addsubject', [ProjectController::class, 'addSubject']);

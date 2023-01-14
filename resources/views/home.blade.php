@@ -4,88 +4,86 @@
             <div class="container mt-5 mb-5">
                 <table class="table table-bordered table-hover text-center">
                     <tr>
-                        <th colspan="5">
+                        <th colspan="6">
                             <h2 class="text-center fw-bold">Todays Schedule</h2>
                         </th>
                     </tr>
                     <tr>
                         <th>No</th>
                         <th>Subject</th>
+                        <th>Topic</th>
                         <th>Time</th>
                         <th>Duration</th>
                         <th>Action</th>
                     </tr>
-
-                   
+                    <?php
+                        $date = date('l') ;
+                        //$date = 'Sunday';
+                        if ($date == 'Saturday') {
+                            $index = 0;
+                            $day = $subjectsPerDay->saturday;
+                        } else if ($date == 'Sunday') {
+                            $index = $subjectsPerDay->saturday;
+                            $day = $subjectsPerDay->sunday;
+                        } else if ($date == 'Monday') {
+                            $index = $subjectsPerDay->saturday + $subjectsPerDay->sunday;
+                            $day = $subjectsPerDay->monday;
+                        } else if ($date == 'Tuesday') {
+                            $index = $subjectsPerDay->saturday + $subjectsPerDay->sunday + $subjectsPerDay->monday;
+                            $day = $subjectsPerDay->tuesday;
+                        } else if ($date == 'Wednesday') {
+                            $index = $subjectsPerDay->saturday + $subjectsPerDay->sunday + $subjectsPerDay->monday +  $subjectsPerDay->tuesday;
+                            $day = $subjectsPerDay->wednesday;
+                        } else if ($date == 'Thursday') {
+                            $index = $subjectsPerDay->saturday + $subjectsPerDay->sunday + $subjectsPerDay->monday +  $subjectsPerDay->tuesday + $subjectsPerDay->wednesday;
+                            $day = $subjectsPerDay->thursday;
+                        } else if ($date == 'Friday') {
+                            $index = $subjectsPerDay->saturday + $subjectsPerDay->sunday + $subjectsPerDay->monday +  $subjectsPerDay->tuesday + $subjectsPerDay->wednesday + $subjectsPerDay->thursday;
+                            $day = $subjectsPerDay->friday;
+                        }
+                    ?>
                     <tbody>
-                        <tr>
-                            <td>
-                                1
-                            </td>
-                            <td>
-                                Discrete Mathmatics
-                            </td>
-                            <td>
-                                9 am to 10 am
-                            </td>
-                            <td>
-                                60 minutes
-                            </td>
-                            <td>
-                                <button class='btn btn-success fw-bold' type='submit' name='' value=''>Completed</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                2
-                            </td>
-                            <td>
-                                Numerical Methods
-                            </td>
-                            <td>
-                                10 am to 10.30 am
-                            </td>
-                            <td>
-                                30 minutes
-                            </td>
-                            <td>
-                                <button class='btn btn-success fw-bold' type='submit' name='' value=''>Completed</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                3
-                            </td>
-                            <td>
-                                Java
-                            </td>
-                            <td>
-                                8 pm to 9 pm
-                            </td>
-                            <td>
-                                60 minutes
-                            </td>
-                            <td>
-                                <button class='btn btn-warning fw-bold' type='submit' name='' value=''>Mark As Complete</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                4
-                            </td>
-                            <td>
-                                Data Structure
-                            </td>
-                            <td>
-                                6 pm to 8 pm
-                            </td>
-                            <td>
-                                120 minutes
-                            </td>
-                            <td>
-                                <button class='btn btn-warning fw-bold' type='submit' name='' value=''>Mark As Complete</button>
-                            </td>
-                        </tr>
+                        @for($i = 0; $i < count($timeSlots); $i++)
+                            @if ($i < $day && $index < count($subjectStatus))
+                            <tr>
+                                <td>
+                                    {{$i + 1}}
+                                </td>
+                                <td>
+                                    {{$subjectStatus[$index]->subject}}
+                                </td>
+                                <td>
+                                    {{$subjectStatus[$index]->topic}}
+                                </td>
+                                <td>
+                                    {{date('h:i A', strtotime($timeSlots[$i]->start)) . ' - ' . date('h:i A', strtotime($timeSlots[$i]->end))}}
+                                </td>
+                                <td>
+                                    @php
+                                        $duration = (strtotime($timeSlots[$i]->end) - strtotime($timeSlots[$i]->start)) / 60;
+                                        if ($duration >= 60) {
+                                            echo (int)($duration / 60)." hour " . ($duration % 60) . " minutes";
+                                        } else {
+                                            echo $duration." minutes";
+                                        }
+                                    @endphp
+                                </td>
+                                <td>
+                                    @if($subjectStatus[$index]->last_date != date("Y-m-d")) 
+                                        <form action="{{url('setcompleted')}}" method="POST">
+                                        @csrf
+                                            <button class="btn btn-warning fw-bold" value="{{$subjectStatus[$index]->id}}" name="rowId">Mark as Complete</button>
+                                        </form>
+                                    @else
+                                        <button class="btn btn-success fw-bold">Completed</button>
+                                    @endif
+                                </td>
+                                <?php
+                                    $index++;
+                                ?>
+                            </tr>
+                            @endif      
+                        @endfor
                     </tbody>
                 </table>
             </div>
@@ -93,136 +91,160 @@
             <div class="container mt-5 mb-5">
                 <table class="table table-bordered table-hover text-center">
                     <tr>
-                        <th colspan="5">
+                        <th colspan="{{count($timeSlots) + 1}}">
                             <h2 class="text-center fw-bold">Weekly Schedule</h2>
                         </th>
                     </tr>
                     <tr>
-                        <th>Day/Time</th>
-                        <th>9 am - 10 am</th>
-                        <th>10 am - 10.30 am</th>
-                        <th>6 pm - 8 pm</th>
-                        <th>8 pm - 9 pm</th>
+                    <th>Day/Time</th>
+                    @foreach ($timeSlots as $timeSlot)
+                        <th>{{date('h:i A', strtotime($timeSlot->start)) . ' - ' . date('h:i A', strtotime($timeSlot->end))}}</th>
+                    @endforeach    
                     </tr>
                     <tbody>
+                        <?php
+                            $index = 0;
+                        ?>
                         <tr>
                             <td>
                                 Saturday
                             </td>
-                            <td>
-                                Discrete Mathmatics
-                            </td>
-                            <td>
-                                Numerical Methods
-                            </td>
-                            <td>
-                                Java
-                            </td>
-                            <td>
-                                Data Structure
-                            </td>
+                            @for($i = 0; $i < count($timeSlots); $i++)
+                                @if ($i < $subjectsPerDay->saturday && $index < count($subjectStatus))
+                                    <td>
+                                        {{$subjectStatus[$index]->subject}}
+                                        <br>
+                                        {{$subjectStatus[$index]->topic}}
+                                    </td>
+                                    <?php
+                                        $index++;
+                                    ?>
+                                @else 
+                                    <td>Free</td>
+                                @endif    
+                                
+                            @endfor
                         </tr>
                         <tr>
                             <td>
                                 Sunday
                             </td>
-                            <td>
-                                Numerical Methods
-                            </td>
-                            <td>
-                                Free
-                            </td>
-                            <td>
-                                Free
-                            </td>
-                            <td>
-                                Algorithm
-                            </td>
+                            @for($i = 0; $i < count($timeSlots); $i++)
+                                @if ($i < $subjectsPerDay->sunday && $index < count($subjectStatus))
+                                    <td>
+                                        {{$subjectStatus[$index]->subject}}
+                                        <br>
+                                        {{$subjectStatus[$index]->topic}}
+                                    </td>
+                                    <?php
+                                        $index++;
+                                    ?>
+                                @else 
+                                    <td>Free</td>
+                                @endif    
+                               
+                            @endfor
                         </tr>
                         <tr>
                             <td>
                                 Monday
                             </td>
-                            <td>
-                                Free
-                            </td>
-                            <td>
-                                Data Structure
-                            </td>
-                            <td>
-                                Java
-                            </td>
-                            <td>
-                                Free
-                            </td>
+                            @for($i = 0; $i < count($timeSlots); $i++)
+                                @if ($i < $subjectsPerDay->monday && $index < count($subjectStatus))
+                                    <td>
+                                        {{$subjectStatus[$index]->subject}}
+                                        <br>
+                                        {{$subjectStatus[$index]->topic}}
+                                    </td>
+                                    <?php
+                                        $index++;
+                                    ?>
+                                @else 
+                                    <td>Free</td>
+                                @endif    
+                                
+                            @endfor
                         </tr>
                         <tr>
                             <td>
                                 Tuesday
                             </td>
-                            <td>
-                                Java
-                            </td>
-                            <td>
-                                Algorithm
-                            </td>
-                            <td>
-                               Numerical Methods
-                            </td>
-                            <td>
-                                Data Science
-                            </td>
+                            @for($i = 0; $i < count($timeSlots); $i++)
+                                @if ($i < $subjectsPerDay->tuesday && $index < count($subjectStatus))
+                                    <td>
+                                        {{$subjectStatus[$index]->subject}}
+                                        <br>
+                                        {{$subjectStatus[$index]->topic}}
+                                    </td>
+                                    <?php
+                                        $index++;
+                                    ?>
+                                @else 
+                                    <td>Free</td>
+                                @endif    
+                                
+                            @endfor
                         </tr>
                         <tr>
                             <td>
                                 Wednesday
                             </td>
-                            <td>
-                                Free
-                            </td>
-                            <td>
-                                Artificial Intelligence
-                            </td>
-                            <td>
-                               Java
-                            </td>
-                            <td>
-                                Algorithm
-                            </td>
+                            @for($i = 0; $i < count($timeSlots); $i++)
+                                @if ($i < $subjectsPerDay->wednesday && $index < count($subjectStatus))
+                                    <td>
+                                        {{$subjectStatus[$index]->subject}}
+                                        <br>
+                                        {{$subjectStatus[$index]->topic}}
+                                    </td>
+                                    <?php
+                                        $index++;
+                                    ?>
+                                @else 
+                                    <td>Free</td>
+                                @endif    
+                                
+                            @endfor
+                            
                         </tr>
                         <tr>
                             <td>
                                 Thursday
                             </td>
-                            <td>
-                                Algorithm
-                            </td>
-                            <td>
-                                Data Structure
-                            </td>
-                            <td>
-                               Free
-                            </td>
-                            <td>
-                                Free
-                            </td>
+                            @for($i = 0; $i < count($timeSlots); $i++)
+                                @if ($i < $subjectsPerDay->thursday && $index < count($subjectStatus))
+                                    <td>
+                                        {{$subjectStatus[$index]->subject}}
+                                        <br>
+                                        {{$subjectStatus[$index]->topic}}
+                                    </td>
+                                    <?php
+                                        $index++;
+                                    ?>
+                                @else 
+                                    <td>Free</td>
+                                @endif    
+                                
+                            @endfor
                         </tr>
                         <tr>
                             <td>
                                 Friday
                             </td>
-                            <td>
-                                Free
-                            </td>
-                            <td>
-                                Numerical Methods
-                            </td>
-                            <td>
-                               Discrete Mathmatics
-                            </td>
-                            <td>
-                                Algorithm
-                            </td>
+                            @for($i = 0; $i < count($timeSlots); $i++)
+                                @if ($i < $subjectsPerDay->friday && $index < count($subjectStatus))
+                                    <td>
+                                        {{$subjectStatus[$index]->subject}}
+                                        <br>
+                                        {{$subjectStatus[$index]->topic}}
+                                    </td>
+                                    <?php
+                                        $index++;
+                                    ?>
+                                @else 
+                                    <td>Free</td>
+                                @endif    
+                                
+                            @endfor
                         </tr>
                     </tbody>
                 </table>

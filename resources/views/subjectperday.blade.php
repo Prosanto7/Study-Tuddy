@@ -10,7 +10,7 @@
                     </tr>
                     <tr>
                         <th>Day</th>
-                        <th>Number of Subjects</th>
+                        <th>Number of Maximum Subjects</th>
                         <!-- <th>Action</th> -->
                     </tr>
                     <tbody>

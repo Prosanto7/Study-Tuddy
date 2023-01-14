@@ -9,7 +9,10 @@ use App\Models\SubjectsPerDay;
 class ProjectController extends Controller
 {
     function showHome() {
-        return view('home');
+        $timeSlots = DB::table('time_slots')->where('user_id', \Auth::id())->orderBy('start', 'asc')->get();
+        $subjectStatus = DB::select('SELECT * FROM `subject_status` WHERE user_id = ' . \Auth::id() . ' ORDER by (status - completed) DESC');
+        $subjectsPerDay = SubjectsPerDay::find(\Auth::id());
+        return view('home', ['timeSlots' => $timeSlots, 'subjectStatus' => $subjectStatus, 'subjectsPerDay' => $subjectsPerDay]);
     }
 
     function showSubjectsPerDay() {
@@ -140,7 +143,9 @@ class ProjectController extends Controller
             'user_id' => \Auth::id(),
             'subject' => $subject,
             'topic' => $_POST['topicName'],
-            'status' => $_POST['status']
+            'status' => $_POST['status'],
+            'completed' => 0,
+            'last_date' => ""
         ]);
 
         return redirect()->to('subjects/#'.$subject);
@@ -157,5 +162,15 @@ class ProjectController extends Controller
 
         DB::table('subject_status')->where('id', $_POST['rowId'])->update(['topic' => $_POST['topicName'], 'status' => $_POST['status']]);
         return redirect()->to('subjects/#'.$subject);
+    }
+
+    function setCompleted() {
+        $subjectStatus = DB::table('subject_status')->where('id', $_POST['rowId'])->get();
+        if (count($subjectStatus) == 1) {
+            $completed = $subjectStatus[0]->completed + 1;
+        }
+        $last_date = date("Y-m-d");
+        DB::table('subject_status')->where('id', $_POST['rowId'])->update(['completed' => $completed, 'last_date' => $last_date]);
+        return back()->with('success', $subjectStatus[0]->topic.' completed Successfully!');
     }
 }
