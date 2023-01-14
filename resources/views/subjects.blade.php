@@ -37,6 +37,9 @@
                                 </td>
                                 <td>
                                     <input class="form-control" type="text" name="subjectName" style="height:100%; margin-top: 0%; margin-bottom: 0%;" placeholder="Enter subject name or course title">
+                                    @error('subjectName')
+                                        <span class="warning">{{$message}}</span>
+                                    @enderror
                                 </td>
                                 <td>
                                     <button type="submit" class="btn btn-success fw-bold" name="addSubject">Add Subject</button>
@@ -55,7 +58,7 @@
                                 <th>No</th>
                                 <th>Subject or Course Title</th>
                                 <th>Topics</th>
-                                <th>Status</th>
+                                <th>Classes Required</th>
                                 <th>Action</th>
                             </tr>
                     <tbody>
@@ -94,13 +97,10 @@
                                 <form action="{{url('addtopic/'.$subjectName)}}" method="POST">
                                     @csrf
                                     <td>
-                                        <input class="form-control" type="text" name="topicName" style="height:100%; margin-top: 0%; margin-bottom: 0%;" placeholder="Enter topic name">
+                                        <input class="form-control" type="text" name="topicName" style="height:100%; margin-top: 0%; margin-bottom: 0%;" placeholder="Enter topic name" Required>
                                     </td>
                                     <td>
-                                        <select class="form-select text-center" aria-label="Default select example" name="status">
-                                            <option>Completed</option>
-                                            <option selected>Not Completed</option>
-                                        </select>
+                                        <input class="form-control" type="number" name="status" style="height:100%; margin-top: 0%; margin-bottom: 0%;" placeholder="Number of classes required" Required min="1">
                                     </td>
                                     <td>
                                         <button type="submit" class="btn btn-success fw-bold" name="addTopic">Add Topic</button>

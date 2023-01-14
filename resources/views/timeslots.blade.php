@@ -18,7 +18,6 @@
                     <tbody>
                         @php 
                             $i = 1;
-                            $lastID = 0;
                         @endphp
 
                         @foreach($timeSlots as $timeSlot) 
@@ -40,7 +39,6 @@
                                         } else {
                                             echo $duration." minutes";
                                         }
-                                        $lastID = $timeSlot->id;
                                     @endphp
                                 </td>
                                 <td>
@@ -65,7 +63,7 @@
                                     </td>
                                     <td></td>
                                     <td>
-                                        <button type="submit" class="btn btn-success fw-bold" name="addTime" value="{{$lastID}}">Add Time Slot</button>
+                                        <button type="submit" class="btn btn-success fw-bold" name="addTime" value="">Add Time Slot</button>
                                     </td>
                                 </form>
                             </tr>

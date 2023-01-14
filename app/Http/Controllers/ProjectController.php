@@ -39,7 +39,7 @@ class ProjectController extends Controller
     }
 
     function showTimeSlots() {
-        $timeSlots = DB::table('time_slots')->where('user_id', \Auth::id())->get();
+        $timeSlots = DB::table('time_slots')->where('user_id', \Auth::id())->orderBy('start', 'asc')->get();
         return view('timeslots', ['timeSlots' => $timeSlots]);
     }
 
@@ -60,17 +60,13 @@ class ProjectController extends Controller
                 return back()->with('error','Given time slot is already taken between ' . date('h:i:s A', strtotime($timeSlot->start)) . ' to ' . date('h:i:s A',strtotime($timeSlot->end)));
             } else if ($_POST['end'] > $timeSlot->start && $_POST['end'] < $timeSlot->end) { 
                 return back()->with('error','Given time slot is already taken between ' . date('h:i:s A', strtotime($timeSlot->start)) . ' to ' . date('h:i:s A',strtotime($timeSlot->end)));
+            } else if ($_POST['start'] < $timeSlot->start && $_POST['end'] > $timeSlot->end) {
+                return back()->with('error','Time slot ' . date('h:i:s A', strtotime($timeSlot->start)) . ' to ' . date('h:i:s A',strtotime($timeSlot->end)) . ' is in the given time slot.');
             }
         }
 
-        if ($_POST['addTime'] == '0') {
-            $id = (int) \Auth::id() + 1;
-        } else {
-            $id = (int) $_POST['addTime'] + 1;
-        }
-
         DB::table('time_slots')->insert([
-            'id' => $id,
+            'id' => rand(1111111111111, 9999999999999),
             'user_id' => \Auth::id(),
             'start' => $_POST['start'],
             'end' => $_POST['end']
@@ -81,7 +77,7 @@ class ProjectController extends Controller
 
     function showSubjects() {
         $subjects = DB::table('subjects')->where('user_id', \Auth::id())->get();
-        $subjectStatus = DB::table('subject_status')->where('user_id', \Auth::id())->get();
+        $subjectStatus = DB::table('subject_status')->where('user_id', \Auth::id())->orderBy('topic', 'asc')->get();
         return view('subjects', ['subjects' => $subjects, 'subjectStatus' => $subjectStatus]);
     }
 
@@ -90,7 +86,17 @@ class ProjectController extends Controller
         return back()->with('success','Subject deleted Successfully.');
     }
 
-    function addSubject() {
+    function addSubject(Request $request) {
+        $rules = [
+            'subjectName' => 'required',
+        ];
+
+        $customMessage = [
+            'subjectName.required' => 'The subject name field is required.',
+        ];
+
+        $this->validate($request, $rules, $customMessage);
+
         $subjects = DB::table('subjects')->where('user_id', \Auth::id())->get();
         $lastID = 0;
         foreach($subjects as $subject) {
@@ -121,6 +127,8 @@ class ProjectController extends Controller
     }
 
     function addTopic($subject) {
+
+
         $subjectStatus = DB::table('subject_status')->where('user_id', \Auth::id())->where('subject', $subject)->get();
         
         foreach($subjectStatus as $subjectStat) {
