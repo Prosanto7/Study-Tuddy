@@ -66,6 +66,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/deletetimeslot', [ProjectController::class, 'deleteTimeSlot']);
 
     Route::post('/addtimeslot', [ProjectController::class, 'addTimeSlot']);
+
+    Route::get('/progressreport', [ProjectController::class, 'progressReport']);
 });
 
 

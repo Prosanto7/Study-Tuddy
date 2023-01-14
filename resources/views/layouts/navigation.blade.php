@@ -17,6 +17,7 @@
                                         <li class="nav-item"><a class="nav-link" href="{{url('subjects')}}" style="color: #ffffff;">Subjects</a></li>
                                         <li class="nav-item"><a class="nav-link" href="{{url('subjectsperday')}}" style="color: #ffffff;">Subjects Per Day</a></li>
                                         <li class="nav-item"><a class="nav-link" href="{{url('timeslots')}}" style="color: #ffffff;">Time Slots</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="{{url('progressreport')}}" style="color: #ffffff;">Progress Report</a></li>
                                         <li class="nav-item"><a class="nav-link" href="{{url('logout')}}" style="color: #ffffff;">Logout</a></li>
                                     @else 
                                         <li class="nav-item"><a class="nav-link" style="color: #ffffff;">Plan Your Study</a></li>

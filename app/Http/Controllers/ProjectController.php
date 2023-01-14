@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\SubjectsPerDay;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ProjectController extends Controller
 {
@@ -172,5 +173,15 @@ class ProjectController extends Controller
         $last_date = date("Y-m-d");
         DB::table('subject_status')->where('id', $_POST['rowId'])->update(['completed' => $completed, 'last_date' => $last_date]);
         return back()->with('success', $subjectStatus[0]->topic.' completed Successfully!');
+    }
+
+    function progressReport() {
+        $timeSlots = DB::table('time_slots')->where('user_id', \Auth::id())->orderBy('start', 'asc')->get();
+        $subjects = DB::table('subjects')->where('user_id', \Auth::id())->get();
+        $subjectStatus = DB::select('SELECT * FROM `subject_status` WHERE user_id = ' . \Auth::id() . ' ORDER by (status - completed) DESC');
+        $subjectsPerDay = SubjectsPerDay::find(\Auth::id());
+        
+        $pdf = Pdf::loadView('pdfgenerator', ['timeSlots' => $timeSlots, 'subjects' => $subjects, 'subjectStatus' => $subjectStatus, 'subjectsPerDay' => $subjectsPerDay]);
+        return $pdf->stream('invoice.pdf');
     }
 }
