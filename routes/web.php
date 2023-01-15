@@ -33,6 +33,8 @@ Route::group(['middleware' => 'guest'], function () {
 
     Route::get('/register', [AuthController::class, 'register_view']);
 
+    Route::post('/register', [AuthController::class, 'register']);
+
     Route::post('/sendcode', [AuthController::class, 'sendCode']);
 
     Route::post('/checkcode', [AuthController::class, 'checkCode']);

@@ -17,8 +17,8 @@
                         <th>Action</th>
                     </tr>
                     <?php
-                        $date = date('l') ;
-                        //$date = 'Sunday';
+                        //$date = date('l') ;
+                        $date = 'Sunday';
                         if ($date == 'Saturday') {
                             $index = 0;
                             $day = $subjectsPerDay->saturday;
@@ -41,6 +41,8 @@
                             $index = $subjectsPerDay->saturday + $subjectsPerDay->sunday + $subjectsPerDay->monday +  $subjectsPerDay->tuesday + $subjectsPerDay->wednesday + $subjectsPerDay->thursday;
                             $day = $subjectsPerDay->friday;
                         }
+
+                        //echo $index .  " " . $day;
                     ?>
                     <tbody>
                         @for($i = 0; $i < count($timeSlots); $i++)
