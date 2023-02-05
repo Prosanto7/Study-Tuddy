@@ -17,27 +17,109 @@
                         <th>Action</th>
                     </tr>
                     <?php
-                        //$date = date('l') ;
-                        $date = 'Sunday';
+                        $date = date('l') ;
+                        //$date = 'Tuesday';
                         if ($date == 'Saturday') {
                             $index = 0;
                             $day = $subjectsPerDay->saturday;
                         } else if ($date == 'Sunday') {
+                            if ($subjectsPerDay->saturday > count($timeSlots)) {
+                                $subjectsPerDay->saturday = count($timeSlots);
+                            }
                             $index = $subjectsPerDay->saturday;
                             $day = $subjectsPerDay->sunday;
                         } else if ($date == 'Monday') {
+                            if ($subjectsPerDay->saturday > count($timeSlots)) {
+                                $subjectsPerDay->saturday = count($timeSlots);
+                            }
+
+                            if ($subjectsPerDay->sunday > count($timeSlots)) {
+                                $subjectsPerDay->sunday = count($timeSlots);
+                            }
                             $index = $subjectsPerDay->saturday + $subjectsPerDay->sunday;
                             $day = $subjectsPerDay->monday;
                         } else if ($date == 'Tuesday') {
+                            if ($subjectsPerDay->saturday > count($timeSlots)) {
+                                $subjectsPerDay->saturday = count($timeSlots);
+                            }
+
+                            if ($subjectsPerDay->sunday > count($timeSlots)) {
+                                $subjectsPerDay->sunday = count($timeSlots);
+                            }
+
+                            if ($subjectsPerDay->monday > count($timeSlots)) {
+                                $subjectsPerDay->monday = count($timeSlots);
+                            }
+
                             $index = $subjectsPerDay->saturday + $subjectsPerDay->sunday + $subjectsPerDay->monday;
                             $day = $subjectsPerDay->tuesday;
                         } else if ($date == 'Wednesday') {
+                            if ($subjectsPerDay->saturday > count($timeSlots)) {
+                                $subjectsPerDay->saturday = count($timeSlots);
+                            }
+
+                            if ($subjectsPerDay->sunday > count($timeSlots)) {
+                                $subjectsPerDay->sunday = count($timeSlots);
+                            }
+
+                            if ($subjectsPerDay->monday > count($timeSlots)) {
+                                $subjectsPerDay->monday = count($timeSlots);
+                            }
+
+                            if ($subjectsPerDay->tuesday > count($timeSlots)) {
+                                $subjectsPerDay->tuesday = count($timeSlots);
+                            }
+
                             $index = $subjectsPerDay->saturday + $subjectsPerDay->sunday + $subjectsPerDay->monday +  $subjectsPerDay->tuesday;
                             $day = $subjectsPerDay->wednesday;
                         } else if ($date == 'Thursday') {
+                            if ($subjectsPerDay->saturday > count($timeSlots)) {
+                                $subjectsPerDay->saturday = count($timeSlots);
+                            }
+
+                            if ($subjectsPerDay->sunday > count($timeSlots)) {
+                                $subjectsPerDay->sunday = count($timeSlots);
+                            }
+
+                            if ($subjectsPerDay->monday > count($timeSlots)) {
+                                $subjectsPerDay->monday = count($timeSlots);
+                            }
+
+                            if ($subjectsPerDay->tuesday > count($timeSlots)) {
+                                $subjectsPerDay->tuesday = count($timeSlots);
+                            }
+
+                            if ($subjectsPerDay->wednesday > count($timeSlots)) {
+                                $subjectsPerDay->wednesday = count($timeSlots);
+                            }
+
                             $index = $subjectsPerDay->saturday + $subjectsPerDay->sunday + $subjectsPerDay->monday +  $subjectsPerDay->tuesday + $subjectsPerDay->wednesday;
                             $day = $subjectsPerDay->thursday;
                         } else if ($date == 'Friday') {
+                            if ($subjectsPerDay->saturday > count($timeSlots)) {
+                                $subjectsPerDay->saturday = count($timeSlots);
+                            }
+
+                            if ($subjectsPerDay->sunday > count($timeSlots)) {
+                                $subjectsPerDay->sunday = count($timeSlots);
+                            }
+
+                            if ($subjectsPerDay->monday > count($timeSlots)) {
+                                $subjectsPerDay->monday = count($timeSlots);
+                            }
+
+                            if ($subjectsPerDay->tuesday > count($timeSlots)) {
+                                $subjectsPerDay->tuesday = count($timeSlots);
+                            }
+
+                            if ($subjectsPerDay->wednesday > count($timeSlots)) {
+                                $subjectsPerDay->wednesday = count($timeSlots);
+                            }
+
+                            if ($subjectsPerDay->thursday > count($timeSlots)) {
+                                $subjectsPerDay->thursday = count($timeSlots);
+                            }
+
                             $index = $subjectsPerDay->saturday + $subjectsPerDay->sunday + $subjectsPerDay->monday +  $subjectsPerDay->tuesday + $subjectsPerDay->wednesday + $subjectsPerDay->thursday;
                             $day = $subjectsPerDay->friday;
                         }
