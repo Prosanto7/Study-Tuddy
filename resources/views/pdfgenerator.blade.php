@@ -90,7 +90,7 @@
                                 <td colspan = "3" style="text-align:right; font-weight:bold;">Total Percentage  </td> 
                                 <td style="font-weight:bold;"> 
                                     @php
-                                        $subPercentage = $perSebjectPercantage / $subjectCount;
+                                        $subPercentage = $perSebjectPercantage / 10;
                                     @endphp
                                     {{number_format((float) $subPercentage, 2, '.', '') . ' %'}}
                                 </td>  

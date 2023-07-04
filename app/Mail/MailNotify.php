@@ -32,7 +32,7 @@ class MailNotify extends Mailable
      */
     public function build()
     {
-        return $this->from('prosantodeb7@gmail.com', 'Reset Password')
+        return $this->from('prosanto2514@student.nstu.edu.bd', 'Reset Password')
         ->subject($this->data["subject"])
                     ->view('emails.subscribe')->with("data",$this->data);
     }
