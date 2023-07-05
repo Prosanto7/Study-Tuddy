@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -88,7 +89,19 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/progressreport', [ProjectController::class, 'progressReport']);
 });
 
+Route::get('/admin-logout', [AdminController::class, 'logout']);
 
+Route::get('/admin',  [AdminController::class, 'showAdmin']);
+
+Route::post('/addclass',  [AdminController::class, 'addClass']);
+
+Route::post('/addAdminSubject',  [AdminController::class, 'addAdminSubject']);
+
+Route::post('/deleteclass',  [AdminController::class, 'deleteClass']);
+
+Route::post('/deleteAdminSubject/{classId}',  [AdminController::class, 'deleteAdminSubject']);
+
+Route::post('/updateAdminSubject/{classId}',  [AdminController::class, 'updateAdminSubject']);
 
 // Route::get('/home', [SiteController::class, 'Home']);
 

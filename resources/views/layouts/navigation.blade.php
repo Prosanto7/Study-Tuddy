@@ -19,6 +19,9 @@
                                         <li class="nav-item"><a class="nav-link" href="{{url('timeslots')}}" style="color: #ffffff;">Time Slots</a></li>
                                         <li class="nav-item"><a class="nav-link" href="{{url('progressreport')}}" style="color: #ffffff;">Progress Report</a></li>
                                         <li class="nav-item"><a class="nav-link" href="{{url('logout')}}" style="color: #ffffff;">Logout</a></li>
+                                    @elseif (session()->has('admin')) 
+                                        <li class="nav-item"><a class="nav-link" style="color: #ffffff;">Admin Panel</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="{{url('admin-logout')}}" style="color: #ffffff;">Logout</a></li>
                                     @else 
                                         <li class="nav-item"><a class="nav-link" style="color: #ffffff;">Plan Your Study</a></li>
                                     @endif

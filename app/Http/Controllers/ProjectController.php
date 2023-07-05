@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\SubjectsPerDay;
@@ -10,19 +11,19 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class ProjectController extends Controller
 {
     function showHome() {
-        $timeSlots = DB::table('time_slots')->where('user_id', \Auth::id())->orderBy('start', 'asc')->get();
-        $subjectStatus = DB::select('SELECT * FROM `subject_status` WHERE user_id = ' . \Auth::id() . ' ORDER by (status - completed) DESC');
-        $subjectsPerDay = SubjectsPerDay::find(\Auth::id());
+        $timeSlots = DB::table('time_slots')->where('user_id', Auth::id())->orderBy('start', 'asc')->get();
+        $subjectStatus = DB::select('SELECT * FROM `subject_status` WHERE user_id = ' . Auth::id() . ' ORDER by (status - completed) DESC');
+        $subjectsPerDay = SubjectsPerDay::find(Auth::id());
         return view('home', ['timeSlots' => $timeSlots, 'subjectStatus' => $subjectStatus, 'subjectsPerDay' => $subjectsPerDay]);
     }
 
     function showSubjectsPerDay() {
-        $subjectsPerDay = SubjectsPerDay::find(\Auth::id());
+        $subjectsPerDay = SubjectsPerDay::find(Auth::id());
         return view('subjectperday', ['subjectsPerDay' => $subjectsPerDay]);
     }
 
     function updateSubjectsPerDay() {
-        $subjectsPerDay = SubjectsPerDay::find(\Auth::id());
+        $subjectsPerDay = SubjectsPerDay::find(Auth::id());
         
             $subjectsPerDay->saturday = $_POST['saturdayValue'];
         
@@ -43,7 +44,7 @@ class ProjectController extends Controller
     }
 
     function showTimeSlots() {
-        $timeSlots = DB::table('time_slots')->where('user_id', \Auth::id())->orderBy('start', 'asc')->get();
+        $timeSlots = DB::table('time_slots')->where('user_id', Auth::id())->orderBy('start', 'asc')->get();
         return view('timeslots', ['timeSlots' => $timeSlots]);
     }
 
@@ -57,7 +58,7 @@ class ProjectController extends Controller
             return back()->with('error','Invalid Time Slot');
         }
 
-        $timeSlots = DB::table('time_slots')->where('user_id', \Auth::id())->get();
+        $timeSlots = DB::table('time_slots')->where('user_id', Auth::id())->get();
 
         foreach($timeSlots as $timeSlot) {
             if ($_POST['start'] > $timeSlot->start && $_POST['start'] < $timeSlot->end) { 
@@ -71,7 +72,7 @@ class ProjectController extends Controller
 
         DB::table('time_slots')->insert([
             'id' => rand(1111111111111, 9999999999999),
-            'user_id' => \Auth::id(),
+            'user_id' => Auth::id(),
             'start' => $_POST['start'],
             'end' => $_POST['end']
         ]);
@@ -80,8 +81,8 @@ class ProjectController extends Controller
     }
 
     function showSubjects() {
-        $subjects = DB::table('subjects')->where('user_id', \Auth::id())->get();
-        $subjectStatus = DB::table('subject_status')->where('user_id', \Auth::id())->orderBy('topic', 'asc')->get();
+        $subjects = DB::table('subjects')->where('user_id', Auth::id())->get();
+        $subjectStatus = DB::table('subject_status')->where('user_id', Auth::id())->orderBy('topic', 'asc')->get();
         return view('subjects', ['subjects' => $subjects, 'subjectStatus' => $subjectStatus]);
     }
 
@@ -101,7 +102,7 @@ class ProjectController extends Controller
 
         $this->validate($request, $rules, $customMessage);
 
-        $subjects = DB::table('subjects')->where('user_id', \Auth::id())->get();
+        $subjects = DB::table('subjects')->where('user_id', Auth::id())->get();
         $lastID = 0;
         foreach($subjects as $subject) {
             if ($subject->subject == $_POST['subjectName']) {
@@ -111,14 +112,14 @@ class ProjectController extends Controller
         }
 
         if ($lastID == 0) {
-            $lastID = \Auth::id() + 1;
+            $lastID = Auth::id() + 1;
         } else {
             $lastID = $lastID + 1;
         }
 
         DB::table('subjects')->insert([
             'id' => $lastID,
-            'user_id' => \Auth::id(),
+            'user_id' => Auth::id(),
             'subject' => $_POST['subjectName']
         ]);
 
@@ -131,7 +132,7 @@ class ProjectController extends Controller
     }
 
     function addTopic($subject) {
-        $subjectStatus = DB::table('subject_status')->where('user_id', \Auth::id())->where('subject', $subject)->get();
+        $subjectStatus = DB::table('subject_status')->where('user_id', Auth::id())->where('subject', $subject)->get();
         
         foreach($subjectStatus as $subjectStat) {
             if ($subjectStat->topic == $_POST['topicName']) {
@@ -141,7 +142,7 @@ class ProjectController extends Controller
 
         DB::table('subject_status')->insert([
             'id' => rand(1111111111111, 9999999999999),
-            'user_id' => \Auth::id(),
+            'user_id' => Auth::id(),
             'subject' => $subject,
             'topic' => $_POST['topicName'],
             'status' => $_POST['status'],
@@ -153,7 +154,7 @@ class ProjectController extends Controller
     }
 
     function updateTopic($subject) {
-        $subjectStatus = DB::table('subject_status')->where('user_id', \Auth::id())->where('subject', $subject)->get();
+        $subjectStatus = DB::table('subject_status')->where('user_id', Auth::id())->where('subject', $subject)->get();
         
         foreach($subjectStatus as $subjectStat) {
             if (($subjectStat->topic == $_POST['topicName']) && ($subjectStat->id != $_POST['rowId'])) {
@@ -176,10 +177,10 @@ class ProjectController extends Controller
     }
 
     function progressReport() {
-        $timeSlots = DB::table('time_slots')->where('user_id', \Auth::id())->orderBy('start', 'asc')->get();
-        $subjects = DB::table('subjects')->where('user_id', \Auth::id())->get();
-        $subjectStatus = DB::select('SELECT * FROM `subject_status` WHERE user_id = ' . \Auth::id() . ' ORDER by (status - completed) DESC');
-        $subjectsPerDay = SubjectsPerDay::find(\Auth::id());
+        $timeSlots = DB::table('time_slots')->where('user_id', Auth::id())->orderBy('start', 'asc')->get();
+        $subjects = DB::table('subjects')->where('user_id', Auth::id())->get();
+        $subjectStatus = DB::select('SELECT * FROM `subject_status` WHERE user_id = ' . Auth::id() . ' ORDER by (status - completed) DESC');
+        $subjectsPerDay = SubjectsPerDay::find(Auth::id());
         
         $pdf = Pdf::loadView('pdfgenerator', ['timeSlots' => $timeSlots, 'subjects' => $subjects, 'subjectStatus' => $subjectStatus, 'subjectsPerDay' => $subjectsPerDay]);
         return $pdf->stream('invoice.pdf');
