@@ -58,6 +58,7 @@
                 <th>No</th>
                 <th>Class Name</th>
                 <th>Subjects</th>
+                <th colspan="2">Resource</th>
                 <th colspan="2">Action</th>
             </tr>
             <tbody>
@@ -71,13 +72,21 @@
                     </td>
                     @foreach($subjects as $subject)
                     @if ($subject->class_id == $class->id)
-                    <form action="{{url('updateAdminSubject/'.$class->id)}}" method="POST">
+                    <form enctype="multipart/form-data" action="{{url('updateAdminSubject/'.$class->id)}}" method="POST">
                         @csrf
                         <td>
                             <input class="form-control" value="{{$subject->subject_name}}" type="text" name="subjectName" style="height:100%; margin-top: 0%; margin-bottom: 0%;" placeholder="Enter subject name" Required>
                         </td>
                         <td>
-                            <button type="submit" class="btn btn-warning fw-bold" name="rowId" value="{{$subject->id}}"><i class="fa fa-upload"></i></button>
+                            <input class="form-control" type="file" name="resourceFile" style="height:100%; margin-top: 0%; margin-bottom: 0%; max-width:250px;" placeholder="Enter upload your file">
+                        </td>
+                        <td>
+                            @if ($subject->file_name != "")
+                                <a class="btn btn-primary" href="{{url('openPDF/'.$subject->file_name)}}">PDF</a>
+                            @endif    
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-warning fw-bold" name="rowId" value="{{$subject->id}}"><i class="fa fa-pencil fa-fw"></i></button>
                         </td>
                     </form>
                     <td>
@@ -93,10 +102,13 @@
                     </td>
                     @endif
                     @endforeach
-                    <form action="{{url('addAdminSubject')}}" method="POST">
+                    <form enctype="multipart/form-data" action="{{url('addAdminSubject')}}" method="POST">
                         @csrf
                         <td>
                             <input class="form-control" type="text" name="subjectName" style="height:100%; margin-top: 0%; margin-bottom: 0%;" placeholder="Enter subject name" Required>
+                        </td>
+                        <td colspan="2">
+                            <input class="form-control" type="file" name="resourceFile" style="height:100%; margin-top: 0%; margin-bottom: 0%; max-width:350px;" placeholder="Enter upload your file" Required>
                         </td>
                         <td colspan="2">
                             <button type="submit" class="btn btn-success fw-bold" name="classId" value="{{$class->id}}">Add Subject</button>

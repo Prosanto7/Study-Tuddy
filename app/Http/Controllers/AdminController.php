@@ -68,16 +68,27 @@ class AdminController extends Controller
             }
         }
 
+        $filename = "";
+
+        if($request->file('resourceFile')) 
+        {
+            $file = $request->file('resourceFile');
+            $filename = time() . '.' . $request->file('resourceFile')->extension();
+            $filePath = public_path() . '/files/uploads/';
+            $file->move($filePath, $filename);
+        }
+
         DB::table('admin_subjects')->insert([
             'id' => null,
             'class_id' =>  $request->classId,
             'subject_name' => $request->subjectName,
+            'file_name' => $filename,
         ]);
 
         return redirect()->to('admin/#'.$request->classId);
     }
 
-    function updateAdminSubject($classId) {
+    function updateAdminSubject($classId, Request $request) {
         $subjects = DB::table('admin_subjects')->where('class_id', $classId)->get();
 
         foreach($subjects as $subject) {
@@ -86,7 +97,22 @@ class AdminController extends Controller
             }
         }
 
+        $filename = "";
+
+        if($request->file('resourceFile')) 
+        {
+            $file = $request->file('resourceFile');
+            $filename = time() . '.' . $request->file('resourceFile')->extension();
+            $filePath = public_path() . '/files/uploads/';
+            $file->move($filePath, $filename);
+        }
+
         DB::table('admin_subjects')->where('id', $_POST['rowId'])->update(['subject_name' => $_POST['subjectName']]);
+
+        if ($filename != "") {
+            DB::table('admin_subjects')->where('id', $_POST['rowId'])->update(['file_name' => $filename]);
+        }
+
         return redirect()->to('admin/#'.$classId);
     }
 

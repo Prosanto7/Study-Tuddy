@@ -103,6 +103,10 @@ Route::post('/deleteAdminSubject/{classId}',  [AdminController::class, 'deleteAd
 
 Route::post('/updateAdminSubject/{classId}',  [AdminController::class, 'updateAdminSubject']);
 
+Route::get('/openPDF/{path}', function($path) {
+    return response()->file(public_path() . '/files/uploads/' . $path);
+});
+
 // Route::get('/home', [SiteController::class, 'Home']);
 
 // Route::get('/contact', [SiteController::class, 'Contact']);
