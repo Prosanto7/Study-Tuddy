@@ -83,7 +83,29 @@ class ProjectController extends Controller
     function showSubjects() {
         $subjects = DB::table('subjects')->where('user_id', Auth::id())->get();
         $subjectStatus = DB::table('subject_status')->where('user_id', Auth::id())->orderBy('topic', 'asc')->get();
-        return view('subjects', ['subjects' => $subjects, 'subjectStatus' => $subjectStatus]);
+        $classes = DB::table('admin_classes')->get();
+        return view('subjects', ['subjects' => $subjects, 'subjectStatus' => $subjectStatus, 'classes' => $classes]);
+    }
+
+    function generateSubjects() {
+        DB::table('subject_status')->where('user_id', Auth::id())->delete();
+        DB::table('subjects')->where('user_id', Auth::id())->delete();
+
+        $subjects = DB::table('admin_subjects')->where('class_id', $_POST['userClass'])->get();
+
+        $lastID = Auth::id() + 1;
+
+        foreach ($subjects as $subject) {
+            DB::table('subjects')->insert([
+                'id' => $lastID,
+                'user_id' => Auth::id(),
+                'subject' => $subject->subject_name,
+                'file_name' => $subject->file_name
+            ]);
+            $lastID++ ;
+        }
+
+        return back()->with('success','Subjects generated for the selected class');
     }
 
     function deleteSubject() {
@@ -133,6 +155,8 @@ class ProjectController extends Controller
 
     function addTopic($subject) {
         $subjectStatus = DB::table('subject_status')->where('user_id', Auth::id())->where('subject', $subject)->get();
+
+        $userSubject = DB::table('subjects')->where('user_id', Auth::id())->where('subject', $subject)->get();
         
         foreach($subjectStatus as $subjectStat) {
             if ($subjectStat->topic == $_POST['topicName']) {
@@ -144,6 +168,7 @@ class ProjectController extends Controller
             'id' => rand(1111111111111, 9999999999999),
             'user_id' => Auth::id(),
             'subject' => $subject,
+            'file_name' => $userSubject[0]->file_name,
             'topic' => $_POST['topicName'],
             'status' => $_POST['status'],
             'completed' => 0,

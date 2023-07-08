@@ -66,6 +66,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/subjects', [ProjectController::class, 'showSubjects']);
 
+    Route::post('/generatesubjects', [ProjectController::class, 'generateSubjects']);
+
     Route::post('/addsubject', [ProjectController::class, 'addSubject']);
 
     Route::post('/deletesubject', [ProjectController::class, 'deleteSubject']);
@@ -99,9 +101,13 @@ Route::post('/addAdminSubject',  [AdminController::class, 'addAdminSubject']);
 
 Route::post('/deleteclass',  [AdminController::class, 'deleteClass']);
 
+Route::post('/updateclass',  [AdminController::class, 'updateClass']);
+
 Route::post('/deleteAdminSubject/{classId}',  [AdminController::class, 'deleteAdminSubject']);
 
 Route::post('/updateAdminSubject/{classId}',  [AdminController::class, 'updateAdminSubject']);
+
+Route::post('/updateAdminSubjectFile/{classId}',  [AdminController::class, 'updateAdminSubjectFile']);
 
 Route::get('/openPDF/{path}', function($path) {
     return response()->file(public_path() . '/files/uploads/' . $path);

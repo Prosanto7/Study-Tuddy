@@ -3,6 +3,19 @@
 @section('content')
 
             <div class="container mt-5 mb-5">
+                <h3>Select Your Class</h3>
+                <form action="{{url('generatesubjects')}}" method="POST">
+                    @csrf
+                    <select class="form-select mt-3" aria-label="Default select example" name="userClass">
+                    @foreach ($classes as $class) 
+                        <option value="{{$class->id}}">{{$class->class_name}}</option>
+                    @endforeach    
+                    </select>
+                    <button type="submit" class="btn btn-primary mt-3">Generate your subjects</button>
+                </form>
+            </div>
+
+            <div class="container mt-5 mb-5">
                 <table class="table table-bordered table-hover text-center">
                     @php 
                         $i = 1;
@@ -57,7 +70,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Subject or Course Title</th>
-                                <th>Topics</th>
+                                <th>Chapters</th>
                                 <th>Classes Required</th>
                                 <th colspan="2">Action</th>
                             </tr>
@@ -78,13 +91,13 @@
                                     <form action="{{url('updatetopic/'.$subjectName)}}" method="POST">
                                     @csrf
                                         <td>
-                                            <input class="form-control" value="{{$subjectstat->topic}}" type="text" name="topicName" style="height:100%; margin-top: 0%; margin-bottom: 0%;" placeholder="Enter topic name" Required>
+                                            <input class="form-control" value="{{$subjectstat->topic}}" type="text" name="topicName" style="height:100%; margin-top: 0%; margin-bottom: 0%;" placeholder="Enter chapter name" Required>
                                         </td>
                                         <td>
                                             <input class="form-control" value="{{$subjectstat->status}}" type="number" name="status" style="height:100%; margin-top: 0%; margin-bottom: 0%;" placeholder="Number of classes required" Required min="1">
                                         </td>
                                         <td>   
-                                            <button type="submit" class="btn btn-warning fw-bold" name="rowId" value="{{$subjectstat->id}}"><i class="fa fa-upload"></i></button> 
+                                            <button type="submit" class="btn btn-warning fw-bold" name="rowId" value="{{$subjectstat->id}}"><i class="fa fa-pencil fa-fw"></i></button> 
                                         </td>
                                     </form>
                                         <td> 
@@ -103,13 +116,13 @@
                                 <form action="{{url('addtopic/'.$subjectName)}}" method="POST">
                                     @csrf
                                     <td>
-                                        <input class="form-control" type="text" name="topicName" style="height:100%; margin-top: 0%; margin-bottom: 0%;" placeholder="Enter topic name" Required>
+                                        <input class="form-control" type="text" name="topicName" style="height:100%; margin-top: 0%; margin-bottom: 0%;" placeholder="Enter chapter name" Required>
                                     </td>
                                     <td>
                                         <input class="form-control" type="number" name="status" style="height:100%; margin-top: 0%; margin-bottom: 0%;" placeholder="Number of classes required" Required min="1">
                                     </td>
                                     <td colspan="2">
-                                        <button type="submit" class="btn btn-success fw-bold" name="addTopic">Add Topic</button>
+                                        <button type="submit" class="btn btn-success fw-bold" name="addTopic">Add Chapter</button>
                                     </td>
                                     </tr>
                                 </form>    

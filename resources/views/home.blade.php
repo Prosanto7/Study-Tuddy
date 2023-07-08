@@ -4,7 +4,7 @@
             <div class="container mt-5 mb-5">
                 <table class="table table-bordered table-hover text-center">
                     <tr>
-                        <th colspan="6">
+                        <th colspan="7">
                             <h2 class="text-center fw-bold">Todays Schedule</h2>
                         </th>
                     </tr>
@@ -14,6 +14,7 @@
                         <th>Topic</th>
                         <th>Time</th>
                         <th>Duration</th>
+                        <th>Resource</th>
                         <th>Action</th>
                     </tr>
                     <?php
@@ -151,6 +152,11 @@
                                             echo $duration." minutes";
                                         }
                                     @endphp
+                                </td>
+                                <td>
+                                    @if ($subjectStatus[$index]->file_name != "")
+                                        <a class="btn btn-primary" target="_blank" href="{{url('openPDF/'.$subjectStatus[$index]->file_name)}}">PDF</a>
+                                    @endif
                                 </td>
                                 <td>
                                     @if($subjectStatus[$index]->last_date != date("Y-m-d")) 

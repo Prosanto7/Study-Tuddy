@@ -59,6 +59,20 @@ class AdminController extends Controller
         return back()->with('success','Class deleted Successfully.');
     }
 
+    function updateClass() {
+        $classes = DB::table('admin_classes')->get();
+    
+        foreach($classes as $class) {
+            if ($class->class_name == $_POST['className']) {
+                return back()->with('error','Class ' . $_POST['className'] . ' is added already!');
+            }
+        }
+
+        DB::table('admin_classes')->where('id', $_POST['rowId'])->update(['class_name' => $_POST['className']]);
+
+        return back()->with('success','Class updated Successfully.');
+    }
+
     function addAdminSubject(Request $request) {
         $subjects = DB::table('admin_subjects')->where('class_id', $request->classId)->get();
     
@@ -88,7 +102,7 @@ class AdminController extends Controller
         return redirect()->to('admin/#'.$request->classId);
     }
 
-    function updateAdminSubject($classId, Request $request) {
+    function updateAdminSubject($classId) {
         $subjects = DB::table('admin_subjects')->where('class_id', $classId)->get();
 
         foreach($subjects as $subject) {
@@ -97,6 +111,12 @@ class AdminController extends Controller
             }
         }
 
+        DB::table('admin_subjects')->where('id', $_POST['rowId'])->update(['subject_name' => $_POST['subjectName']]);
+
+        return redirect()->to('admin/#'.$classId);
+    }
+
+    function updateAdminSubjectFile($classId, Request $request) {
         $filename = "";
 
         if($request->file('resourceFile')) 
@@ -106,8 +126,6 @@ class AdminController extends Controller
             $filePath = public_path() . '/files/uploads/';
             $file->move($filePath, $filename);
         }
-
-        DB::table('admin_subjects')->where('id', $_POST['rowId'])->update(['subject_name' => $_POST['subjectName']]);
 
         if ($filename != "") {
             DB::table('admin_subjects')->where('id', $_POST['rowId'])->update(['file_name' => $filename]);
